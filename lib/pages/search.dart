@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'controller/saved_scroll_controller.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage>{
   var controller = TextEditingController();
   final gridController = ScrollController(keepScrollOffset: false);
+  var scrollController = SavedScrollController();
   final List<String> suggestions = [
     "Nature",
     "Aesthetic",
@@ -20,6 +22,13 @@ class _SearchPageState extends State<SearchPage>{
     "Tech",
     "Inspiration"
   ];
+
+  @override
+  void initState() {
+    scrollController.saveScrollPosition(context);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -60,6 +69,7 @@ class _SearchPageState extends State<SearchPage>{
         ),
       ),
       body: SingleChildScrollView(
+        controller: scrollController.controller,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -154,6 +164,7 @@ class _SearchPageState extends State<SearchPage>{
   @override
   void dispose() {
     controller.dispose();
+    scrollController.controller.dispose();
     super.dispose();
   }
 }

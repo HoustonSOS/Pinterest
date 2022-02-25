@@ -1,3 +1,4 @@
+import 'package:database/pages/controller/saved_scroll_controller.dart';
 import 'package:database/pages/details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ class FeedPage extends StatefulWidget {
 class _FeedPageState extends State<FeedPage> {
   int _index = 0;
   var suggestionsScroll = ScrollController(keepScrollOffset: false);
+  var feedScroll = SavedScrollController();
   final List<String> sortings = [
     "For you",
     "Today",
@@ -24,6 +26,7 @@ class _FeedPageState extends State<FeedPage> {
 
   @override
   void initState() {
+    feedScroll.saveScrollPosition(context);
     super.initState();
     loadImages();
   }
@@ -97,6 +100,7 @@ class _FeedPageState extends State<FeedPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: MasonryGridView.count(
+            controller: feedScroll.controller,
             shrinkWrap: true,
             padding: const EdgeInsets.only(top: 10.0, bottom: 100),
             itemCount: 10,

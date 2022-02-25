@@ -4,18 +4,22 @@ import 'package:database/pages/search.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+   HomePage({Key? key}) : super(key: key){
+    print("🌧HomePage Widget's been created");
+  }
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage>{
+  _HomePageState(){
+    print("🌕HomePage State's been created");
+  }
   int _index = 0;
-
   final List<Widget> pages = [
-    const FeedPage(key: PageStorageKey(1),),
-    const SearchPage(key: PageStorageKey(2),),
-    const ProfilePage(key: PageStorageKey(3),)
+    const FeedPage(key: PageStorageKey("Feed"),),
+    const SearchPage(key: PageStorageKey("Search"),),
+    const ProfilePage(key: PageStorageKey("Profile"),)
   ];
 
   @override
