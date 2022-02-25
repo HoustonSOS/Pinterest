@@ -1,5 +1,4 @@
 import 'package:database/pages/details.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -10,12 +9,19 @@ class FeedPage extends StatefulWidget {
   @override
   _FeedPageState createState() => _FeedPageState();
 }
-class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<FeedPage>{
 
+class _FeedPageState extends State<FeedPage> {
   int _index = 0;
-  List<String> sortings = ["For you", "Today", "Following", "Health", "Renderplex"];
-  var gridScrollController = ScrollController();
+  var suggestionsScroll = ScrollController(keepScrollOffset: false);
+  final List<String> sortings = [
+    "For you",
+    "Today",
+    "Following",
+    "Health",
+    "Renderplex"
+  ];
   List<Image> images = [];
+
   @override
   void initState() {
     super.initState();
@@ -23,8 +29,7 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
   }
 
   void loadImages() {
-
-    for(int i = 0; i < 10; i++){
+    for (int i = 0; i < 10; i++) {
       var image = Image.asset("assets/images/$i.jpeg");
       images.add(image);
     }
@@ -41,13 +46,14 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
           child: Container(
             height: size.height * 0.11,
             child: Padding(
-              padding: const EdgeInsets.only(top:45.0),
+              padding: const EdgeInsets.only(top: 45.0),
               child: ListView.builder(
+                  controller: suggestionsScroll,
                   scrollDirection: Axis.horizontal,
                   itemCount: sortings.length,
-                  itemBuilder: (context, index){
+                  itemBuilder: (context, index) {
                     return GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         setState(() {
                           images.shuffle();
                           _index = index;
@@ -59,26 +65,31 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
                           height: 30,
                           width: 80,
                           alignment: Alignment.center,
-                          child: Text(sortings[index], style: _index != index ? const TextStyle(color: Colors.black) : const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),),
-                          decoration: _index != index ? null : const BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.all(Radius.circular(25.0))
+                          child: Text(
+                            sortings[index],
+                            style: _index != index
+                                ? const TextStyle(color: Colors.black)
+                                : const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
                           ),
+                          decoration: _index != index
+                              ? null
+                              : const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(25.0))),
                         ),
                       ),
                     );
                   }),
             ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10.0,
-                    spreadRadius: 1.0
-                )
-              ]
-            ),
+            decoration: BoxDecoration(color: Colors.white, boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10.0,
+                  spreadRadius: 1.0)
+            ]),
           ),
         ),
         preferredSize: const Size.fromHeight(70),
@@ -88,17 +99,15 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
         child: MasonryGridView.count(
             shrinkWrap: true,
             padding: const EdgeInsets.only(top: 10.0, bottom: 100),
-            controller: gridScrollController,
             itemCount: 10,
             crossAxisCount: 2,
             mainAxisSpacing: 7,
             crossAxisSpacing: 7,
-            itemBuilder: (context, index){
+            itemBuilder: (context, index) {
               return Column(
                 children: [
                   GestureDetector(
                     child: Hero(
-                      transitionOnUserGestures: true,
                       tag: "$index",
                       child: Container(
                         height: images[index].height,
@@ -110,17 +119,15 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
                         ),
                       ),
                     ),
-                    onTap: () async {
-
-                      var n = await Navigator.of(context).push(
-                          PageRouteBuilder(
-                              pageBuilder: (context, animation, anim) => DetailsPage(image: images[index], id: index),
-                              transitionDuration: const Duration(milliseconds: 400),
-                              transitionsBuilder: (context, anim1, anim2, child){
-                                return FadeTransition(opacity: anim1, child: child);
-                              },
-                              fullscreenDialog: true
-                          ));
+                    onTap: () {
+                      Navigator.of(context).push(PageRouteBuilder(
+                          pageBuilder: (context, animation, anim) =>
+                              DetailsPage(image: images[index], id: index),
+                          transitionDuration: const Duration(milliseconds: 400),
+                          transitionsBuilder: (context, anim1, anim2, child) {
+                            return FadeTransition(opacity: anim1, child: child);
+                          },
+                          fullscreenDialog: true));
                     },
                   ),
                   Row(
@@ -136,9 +143,9 @@ class _FeedPageState extends State<FeedPage> with AutomaticKeepAliveClientMixin<
       ),
     );
   }
-
   @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
+  void dispose() {
+    suggestionsScroll.dispose();
+    super.dispose();
+  }
 }

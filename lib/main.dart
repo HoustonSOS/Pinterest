@@ -1,7 +1,4 @@
 import 'package:database/pages/home.dart';
-import 'package:database/pages/pinterest.dart';
-import 'package:database/pages/profile.dart';
-import 'package:database/pages/search.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -13,13 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Hive',
-      home: const HomePage(),
+    return const MaterialApp(
+      title: 'Pinterest',
+      home: HomePage(),
       debugShowCheckedModeBanner: false,
-      routes: {
-        'search_page' :  (context) => const SearchPage(),
-      },
     );
   }
 }

@@ -9,23 +9,24 @@ class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
-
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>{
   int _index = 0;
-  List<Widget> pages = [
-    const FeedPage(key: PageStorageKey("Feed"),),
-    const SearchPage(key: PageStorageKey("Search"),),
-    const ProfilePage(key: PageStorageKey("Profile"),)
+
+  final List<Widget> pages = [
+    const FeedPage(key: PageStorageKey(1),),
+    const SearchPage(key: PageStorageKey(2),),
+    const ProfilePage(key: PageStorageKey(3),)
   ];
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          pages[_index],
-          Padding(
+    return Stack(
+      children: [
+        pages[_index],
+        Material(
+          type: MaterialType.transparency,
+          child: Padding(
             padding: const EdgeInsets.only(bottom: 35.0),
             child: Align(
               alignment: Alignment.bottomCenter,
@@ -86,8 +87,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-        ],
-      ),
+        )
+      ],
     );
   }
+
 }
