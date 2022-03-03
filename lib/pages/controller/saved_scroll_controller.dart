@@ -8,6 +8,7 @@ class SavedScrollController{
 
   void saveScrollPosition(BuildContext context){
     //making sure controller is attached to the widget
+
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       //getting scroll position from the storage
       var pixels = PageStorage.of(context)?.readState(context, identifier: "${context.widget.key}");

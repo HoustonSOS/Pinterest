@@ -25,8 +25,8 @@ class _SearchPageState extends State<SearchPage>{
 
   @override
   void initState() {
-    scrollController.saveScrollPosition(context);
     super.initState();
+    scrollController.saveScrollPosition(context);
   }
 
   @override
@@ -162,7 +162,18 @@ class _SearchPageState extends State<SearchPage>{
   }
 
   @override
+  void activate() {
+    print(widget.toString() + " activated");
+    super.activate();
+  }
+  @override
+  void deactivate() {
+    print(widget.toString() + " deactivated");
+    super.deactivate();
+  }
+  @override
   void dispose() {
+    print(widget.toString() + " is disposed");
     controller.dispose();
     scrollController.controller.dispose();
     super.dispose();

@@ -12,14 +12,18 @@ class UnsplashAPI{
     "Authorization" : "Client-ID 5QYrvyz15mVZW2YyaM68-f5hdrRH1giGTExBmG_oweM"
   };
 
-  static Future<Unsplash> getRandomThumbnail() async {
-    var uri = Uri.https(API_LOCATION, GET_RANDOM);
-
+  static Future<List<Unsplash>> GET(String params) async {
+    var uri = Uri.https(API_LOCATION, params);
+    List<Unsplash> photos = [];
     var response = await get(uri, headers: headers);
 
     switch(response.statusCode){
       case 200:
-        return Unsplash.fromJson(jsonDecode(response.body));
+        var decoded = jsonDecode(response.body);
+        for(var photo in decoded){
+          photos.add(Unsplash.fromJson(photo));
+        }
+        return photos;
       case 400:
         throw const HttpException("The request was unacceptable, often due to missing a required parameter");
       case 401:

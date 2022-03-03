@@ -4,17 +4,12 @@ import 'package:database/pages/search.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-   HomePage({Key? key}) : super(key: key){
-    print("🌧HomePage Widget's been created");
-  }
+   const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage>{
-  _HomePageState(){
-    print("🌕HomePage State's been created");
-  }
   int _index = 0;
   final List<Widget> pages = [
     const FeedPage(key: PageStorageKey("Feed"),),
@@ -27,7 +22,9 @@ class _HomePageState extends State<HomePage>{
     var size = MediaQuery.of(context).size;
     return Stack(
       children: [
+        //current page
         pages[_index],
+        //bottom nav bar
         Material(
           type: MaterialType.transparency,
           child: Padding(
