@@ -1,4 +1,3 @@
-import 'package:database/pages/home.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -11,8 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: 'Pinterest',
-      home: HomePage(),
+      title: 'Hey Lord',
       debugShowCheckedModeBanner: false,
     );
   }
