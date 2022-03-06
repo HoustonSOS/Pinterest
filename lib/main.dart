@@ -1,3 +1,4 @@
+import 'package:database/pages/sign_in.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -11,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Hey Lord',
+      home: SignInPage(),
       debugShowCheckedModeBanner: false,
     );
   }
