@@ -1,5 +1,11 @@
 import 'package:database/pages/sign_in.dart';
+import 'package:database/service/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../service/shared_prefs.dart';
+import '../service/utils.dart';
+import 'logout.dart';
 
 
 class SignUpPage extends StatefulWidget {
@@ -20,17 +26,31 @@ class _SignUpPageState extends State<SignUpPage> {
     super.didChangeDependencies();
   }
   void _createUser(){
+    final _email = email.text.trim();
+    final _password = password.text.trim();
+    final _name = name.text.trim();
 
+    if(email.text.isEmpty || password.text.isEmpty) return;
+
+    AuthService.signUpUser(context, _email, _password).then(
+        (user){
+          _getFireBaseUser(user);
+        });
   }
 
-  void _goToSignIp(){
-    var smth = Navigator.of(context).overlay;
-    print(smth);
+  void _getFireBaseUser(User? user) async {
+    if(user != null){
+      await Prefs.saveUserId(user.uid);
+      Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (_,__,___) => const Logout()));
+    }else{
+      Utils.fireToast("Check your information");
+    }
+  }
+
+  void _goToSignIn(){
     Navigator.of(context).pushReplacement(
       PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => const SignInPage(),
-          transitionDuration: const Duration(milliseconds: 500),
-          fullscreenDialog: true
       ),
     );
   }
@@ -83,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 const Text("Already have an account?"),
                 MaterialButton(
                   child: const Text("Sign in"),
-                  onPressed: _goToSignIp,
+                  onPressed: _goToSignIn,
                 )
               ],
             )

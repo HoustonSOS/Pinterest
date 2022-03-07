@@ -1,5 +1,11 @@
+import 'package:database/pages/logout.dart';
+import 'package:database/service/auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../service/shared_prefs.dart';
+import '../service/utils.dart';
 import 'sign_up.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -13,17 +19,30 @@ class _SignInPageState extends State<SignInPage> {
   final password = TextEditingController();
 
   void _login(){
+    String _email = email.text.trim();
+    String _password = password.text.trim();
 
+    if(email.text.isEmpty || password.text.isEmpty) return;
+
+    AuthService.signInUser(context, _email, _password).then(
+            (user){
+              _getFirebaseUser(user);
+            });
+  }
+
+  _getFirebaseUser(User? user) async {
+    if(user != null){
+      await Prefs.saveUserId(user.uid);
+      Navigator.of(context).pushReplacement(PageRouteBuilder(pageBuilder: (_,__,___) => const Logout()));
+    }else{
+        Utils.fireToast("Check your email or password");
+    }
   }
 
   void _goToSignUp(){
-    var smth = Navigator.of(context).overlay?.widget;
-    print(smth);
     Navigator.of(context).pushReplacement(
         PageRouteBuilder(
             pageBuilder: (context, animation, secondaryAnimation) => const SignUpPage(),
-            transitionDuration: const Duration(milliseconds: 500),
-          fullscreenDialog: true
         ),
     );
   }

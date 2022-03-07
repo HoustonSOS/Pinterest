@@ -13,6 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
 
+  firebase_core: 1.13.1
+  firebase_auth: 3.3.9
+  shared_preferences: ^2.0.13
+  fluttertoast: ^8.0.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
